@@ -1,7 +1,33 @@
 ---
-title: "Code"
+title: "Project"
+author: "Tina Qian, Yanlin Li"
 format: pdf
-editor: visual
 ---
 
-abc
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(readr)
+happiness_2_ <- read_csv("happiness (2).csv")
+```
+
+## Testing Interaction
+fitting workstat, prestige, educ, children, income to measure the overall happiness
+hypothesis test (whether it's significant)
+H0 there is no interaction between prestige and working status
+Ha there is an interaction between prestige and working status
+
+```{r}
+happiness <- happiness_2_ |>
+  mutate(children = babies + preteen + teens)
+
+```
+
+
+
+
+
+## Ordinal Regression
+
+
+## Missing Data
