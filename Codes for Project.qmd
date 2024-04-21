@@ -46,14 +46,22 @@ summary(m1)
 
 ```
 interpretations:
-interpret the slope for female (compared to male) and workstatus (full time), then conduct a hypothesis test investigating whether there is an interaction between working status and being a woman. 
+
+Controlling for other variables in our model, we expect the average score of general happiness for female to be 0.1 point higher than that for male. 
+
+Controlling for other variables in our model, we expect the average score of general happiness for a person working full-time to be 0.03 points higher than those who keep houses. 
 
 the p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
 
-
+```{r}
+#Interaction between years of education and working status
+m2 <- lm(Happy ~ as.factor(workstat) + educ + children + as.factor(income) + 
+           female + as.factor(income)*children,
+         data = Happiness)
+summary(m2)
+```
+the p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household.  
 
 ## Ordinal Regression
 
 ## Multinomial Regression
-
-## Missing Data
