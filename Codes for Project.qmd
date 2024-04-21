@@ -8,26 +8,52 @@ format: pdf
 library(tidyverse)
 library(tidymodels)
 library(readr)
-happiness_2_ <- read_csv("happiness (2).csv")
+library(tidyr)
+happiness <- read_csv("happiness.csv")
 ```
+## Data Exploratory Analysis
 
-## Testing Interaction
-fitting workstat, prestige, educ, children, income to measure the overall happiness
-hypothesis test (whether it's significant)
-H0 there is no interaction between prestige and working status
-Ha there is an interaction between prestige and working status
+
+## Testing Interaction & Assumptions
+
+Hypothesis test:
+H0: there is no interaction between working status and whether one is woman. 
+Ha: there is an interaction between working status and whether one is woman. 
 
 ```{r}
-happiness <- happiness_2_ |>
-  mutate(children = babies + preteen + teens)
+happiness1 <- happiness |>
+  mutate(children = babies + preteen + teens) |>
+  select(prestige, educ, workstat, children, income, female, happy) |>
+  mutate(Happy = case_when(
+  happy == "not too happy" ~ 1,
+  happy == "pretty happy" ~ 2,
+  happy == "very happy" ~ 3,
+  TRUE ~ NA_integer_
+))
+
+delete.na <- function(happiness1, n = 0) {
+  happiness1[rowSums(is.na(happiness1)) <= n, ]
+}
+
+Happiness <- delete.na(happiness1, n = 0)
+
+
+m1 <- lm(Happy ~ as.factor(workstat) + educ + children + as.factor(income) + 
+           female + as.factor(workstat)*female,
+         data = Happiness)
+
+summary(m1)
 
 ```
+interpretations:
+interpret the slope for female (compared to male) and workstatus (full time), then conduct a hypothesis test investigating whether there is an interaction between working status and being a woman. 
 
-
+the p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
 
 
 
 ## Ordinal Regression
 
+## Multinomial Regression
 
 ## Missing Data
