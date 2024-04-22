@@ -4,12 +4,13 @@ author: "Tina Qian, Yanlin Li"
 format: pdf
 ---
 
-```{r}
+```{r, echo = F}
 library(tidyverse)
 library(tidymodels)
 library(readr)
 library(tidyr)
 happiness <- read_csv("happiness.csv")
+
 ```
 ## Data Exploratory Analysis
 
@@ -20,7 +21,7 @@ Hypothesis test:
 H0: there is no interaction between working status and whether one is woman. 
 Ha: there is an interaction between working status and whether one is woman. 
 
-```{r}
+```{r, echo = F}
 happiness1 <- happiness |>
   mutate(children = babies + preteen + teens) |>
   select(prestige, educ, workstat, children, income, female, happy) |>
@@ -53,14 +54,14 @@ Controlling for other variables in our model, we expect the average score of gen
 
 the p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
 
-```{r}
+```{r, echo = F}
 #Interaction between years of education and working status
 m2 <- lm(Happy ~ as.factor(workstat) + educ + children + as.factor(income) + 
            female + as.factor(income)*children,
          data = Happiness)
 summary(m2)
 ```
-the p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household.  
+the p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household. 
 
 ## Ordinal Regression
 
