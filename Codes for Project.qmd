@@ -103,31 +103,44 @@ The fifth plot displays the distribution of observations for participants with d
 
 Among these predictors, we examined two possible interactions: the interaction between work force status and gender, and that between household income and the count of household members under 17. Given the societal expectation for women to bear children and the stereotype of women primarily responsible for childcare, we anticipate a stronger correlation between being female and working part-time. Additionally, we anticipate that households with higher incomes will generally be able to support more members under 17, necessitating greater economic assistance from other family members.
 
+ F test: 
+ (all coef associated with the interaction term are equal to 0)
+ 
 Hypothesis test:
 H0: there is no interaction between working status and whether one is woman. 
 Ha: there is an interaction between working status and whether one is woman. 
 
 ```{r, echo = F}
 
-m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
+
+m0 <- lm(Happy ~ as.factor(workstat) + prestige + educ + young_members + as.factor(income) + 
+           female,
+         data = Happiness)
+summary(m0)
+
+m1 <- lm(Happy ~ as.factor(workstat) + prestige + educ + young_members + as.factor(income) + 
            female + as.factor(workstat)*female,
          data = Happiness)
-
 summary(m1)
+
+anova(m0, m1)
 
 ```
 interpretations:
 
-The p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
+The p value for interaction term between full-time working status and female is 0.0001, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is depended on whether the respondent is female. 
 
 ```{r, echo = F}
 #Interaction between years of education and working status
-m2 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
-           female + as.factor(income)*young_members,
+
+m2 <- lm(Happy ~ as.factor(workstat) + prestige + educ + young_members + as.factor(income) + 
+           female + + as.factor(workstat)*female + as.factor(income)*young_members,
          data = Happiness)
 summary(m2)
+
+anova(m1, m2)
 ```
-The p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household. 
+The f statistic value 0.03 for interaction term between household income (dollars per year) and number of children (young_members) across all levels are lower than 0.05, which is not statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income (dollors per year) is depended on the number of children in the household. 
 
 ## Ordinal Regression
 
@@ -135,3 +148,11 @@ In our study, we contemplated employing both multinomial regression and ordinal 
 
 After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
 
+```{r}
+library(MASS)
+m3 <- polr(as.factor(Happy) ~ as.factor(workstat) + educ + young_members + as.factor(income) + female, 
+           data = Happiness, Hess = T)
+
+summary(m3)
+exp(coef(m3))
+```
