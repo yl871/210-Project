@@ -9,22 +9,17 @@ library(tidyverse)
 library(tidymodels)
 library(readr)
 library(tidyr)
+library(ggplot2)
 happiness <- read_csv("happiness.csv")
 
 ```
 ## Data Exploratory Analysis
 
-
-## Testing Interaction & Assumptions
-
-Hypothesis test:
-H0: there is no interaction between working status and whether one is woman. 
-Ha: there is an interaction between working status and whether one is woman. 
-
 ```{r, echo = F}
+
 happiness1 <- happiness |>
-  mutate(children = babies + preteen + teens) |>
-  select(prestige, educ, workstat, children, income, female, happy) |>
+  mutate(young_members = babies + preteen + teens) |>
+  select(prestige, educ, workstat, young_members, income, female, happy) |>
   mutate(Happy = case_when(
   happy == "not too happy" ~ 1,
   happy == "pretty happy" ~ 2,
@@ -38,8 +33,83 @@ delete.na <- function(happiness1, n = 0) {
 
 Happiness <- delete.na(happiness1, n = 0)
 
+ggplot(
+    data = Happiness,
+    aes(x = educ, fill = as.factor(Happy))
+)+
+geom_bar() +
+labs(x = "Highest Year of School Completed",
+         y = "Number of Observations",
+         title = "Distribution of participants' general happiness with different highest year of school completed")
 
-m1 <- lm(Happy ~ as.factor(workstat) + educ + children + as.factor(income) + 
+ggplot(
+    data = Happiness,
+    aes(x = Happy, fill = as.factor(Happy))
+)+
+geom_bar() +
+labs(y = "Number of Observations",
+         x = "General Happiness",
+         title = "Distribution of participants' general happiness for both genders") +
+     facet_wrap(vars(female),labeller = labeller(female = c("1" = "Females", "0" = "Males")))
+
+ggplot(
+    data = Happiness,
+    aes(x = Happy, fill = as.factor(female))
+)+
+geom_bar() +
+labs(y = "Number of Observations",
+         x = "General Happiness",
+         title = "Distribution of participants' general happiness with different work force status, adjusted for gender") +
+     facet_wrap(vars(workstat))
+
+ggplot(
+    data = Happiness,
+    aes(x = Happy, fill = as.factor(Happy))
+)+
+geom_bar() +
+labs(y = "Number of Observations",
+         x = "General Happiness",
+         title = "Distribution of participants' general happiness with different total family income") +
+     facet_wrap(vars(income))
+
+ggplot(
+    data = Happiness,
+    aes(x = Happy, fill = as.factor(Happy))
+)+
+geom_bar() +
+labs(y = "Number of Observations",
+         x = "General Happiness",
+         title = "Distribution of participants' general happiness with different number of household members under 17") +
+     facet_wrap(vars(young_members))
+
+
+```
+Concerning our response variable "happy," we assigned numerical rankings of "1," "2," and "3" to its three categories—"not too happy," "pretty happy," and "very happy," respectively—to facilitate analysis and model fitting.
+
+Since we focus on the effect of socioeconomic status on happiness in our research question, we selected specific predictor variables: work force status (“workstat”), total family income (“income”), highest year of school completed (“educ”), gender (“female”), and the number of household members under 17 (“young_members”).
+
+To create the predictor variable that records the number of household members under 17,  which was not originally included in our dataset, we aggregated data from three existing variables: the number of babies, preteens, and teenagers in the household. We believe it's more logical to consider these age groups collectively since each requires financial support and additional care from older members of the household, given that they are not yet fully independent.
+
+Given the N/As in the “income” variable and the “young_members” variable, we used Multiple Imputation via Chained Equations (MICE) to perform multiple imputation to the data. We assume MAR is satisfied from our visual examination before.***
+
+We generated visualizations to explore the relationships between the predictor variables and the response variable. Since most of our variables, including the response variable, are categorical, we opted for bar plots for all our exploratory data analyses.
+The first bar plot examines the distribution of observations across different levels of highest year of school completed in the sample, accounting for their overall happiness. The majority of participants in the sample have completed 12-16 years of education, roughly equivalent to middle school and a high school diploma. Across almost every education level, more individuals selected "pretty happy" than "very happy" or "not too happy," possibly influenced by a tendency to prioritize these responses in general.
+The second plot analyzes the distribution of observations for males and females separately, considering their overall happiness. Overall, participants tend to choose "pretty happy" more frequently than "very happy" or "not too happy," and there are more female participants in the dataset than male.
+The third plot examines the distribution of observations across different work force statuses, factoring in gender and overall happiness. Most participants in the dataset are employed full-time, with only a small proportion in school, temporarily unemployed, or not working. More female participants are homemakers or work part-time compared to male participants, while gender distribution is relatively even across other work force statuses. The overall pattern of happiness preference remains consistent across genders.
+The fourth plot illustrates the distribution of observations across different household income levels, considering overall happiness. The majority of participants have a household income above $10,000, especially those with incomes exceeding $25,000, who strongly favor "pretty happy" and "very happy" over "not too happy." The general pattern of happiness preference persists across all income levels.
+The fifth plot displays the distribution of observations for participants with different numbers of young household members, adjusting for overall happiness. Most participants do not have anyone under 17 in their household, while those who do typically have one or two such members. The overall pattern of happiness preference remains consistent across these groups.
+
+## Testing Interaction & Assumptions
+
+Among these predictors, we examined two possible interactions: the interaction between work force status and gender, and that between household income and the count of household members under 17. Given the societal expectation for women to bear children and the stereotype of women primarily responsible for childcare, we anticipate a stronger correlation between being female and working part-time. Additionally, we anticipate that households with higher incomes will generally be able to support more members under 17, necessitating greater economic assistance from other family members.
+
+Hypothesis test:
+H0: there is no interaction between working status and whether one is woman. 
+Ha: there is an interaction between working status and whether one is woman. 
+
+```{r, echo = F}
+
+m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
            female + as.factor(workstat)*female,
          data = Happiness)
 
@@ -48,21 +118,20 @@ summary(m1)
 ```
 interpretations:
 
-Controlling for other variables in our model, we expect the average score of general happiness for female to be 0.1 point higher than that for male. 
-
-Controlling for other variables in our model, we expect the average score of general happiness for a person working full-time to be 0.03 points higher than those who keep houses. 
-
-the p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
+The p value for interaction term between full-time working status and female is 0.09, which is higher than a significance level of 0.05 and not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is not depended on whether the respondent is female. 
 
 ```{r, echo = F}
 #Interaction between years of education and working status
-m2 <- lm(Happy ~ as.factor(workstat) + educ + children + as.factor(income) + 
-           female + as.factor(income)*children,
+m2 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
+           female + as.factor(income)*young_members,
          data = Happiness)
 summary(m2)
 ```
-the p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household. 
+The p value for interaction term between household income and number of children across all levels are higher than 0.05, which is not statistically significant. We do not have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income is not depended on the number of children in the household. 
 
 ## Ordinal Regression
 
-## Multinomial Regression
+In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
+
+After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
+
