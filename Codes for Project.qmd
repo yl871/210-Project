@@ -10,6 +10,7 @@ library(tidymodels)
 library(readr)
 library(tidyr)
 library(ggplot2)
+
 happiness <- read_csv("happiness.csv")
 
 ```
@@ -40,7 +41,8 @@ ggplot(
 geom_bar() +
 labs(x = "Highest Year of School Completed",
          y = "Number of Observations",
-         title = "Distribution of participants' general happiness with different highest year of school completed")
+         title = "Distribution of participants' general happiness with
+                  different highest year of school completed")
 
 ggplot(
     data = Happiness,
@@ -59,7 +61,8 @@ ggplot(
 geom_bar() +
 labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness with different work force status, adjusted for gender") +
+         title = "Distribution of participants' general happiness with 
+     different work force status, adjusted for gender") +
      facet_wrap(vars(workstat))
 
 ggplot(
@@ -69,7 +72,8 @@ ggplot(
 geom_bar() +
 labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness with different total family income") +
+         title = "Distribution of participants' general happiness 
+     with different total family income") +
      facet_wrap(vars(income))
 
 ggplot(
@@ -79,7 +83,8 @@ ggplot(
 geom_bar() +
 labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness with different number of household members under 17") +
+         title = "Distribution of participants' general happiness 
+     with different number of household members under 17") +
      facet_wrap(vars(young_members))
 
 
