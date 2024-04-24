@@ -159,5 +159,18 @@ m3 <- polr(as.factor(Happy) ~ as.factor(workstat) + educ + young_members + as.fa
            data = Happiness, Hess = T)
 
 summary(m3)
+```
+```{r}
 exp(coef(m3))
 ```
+workstat:
+According to the ordinal regression model, a person who retired is predicted to have 1.213 times the odds of being in the next higher score of happiness category compared to a person who keeps house, while adjusting for years of education, household income, the number of children they have, and whether being a woman. In the work force status categories, people with all other status are predicted to have lower possibilities of being in the next higher score of happiness category compared to those who keep houses, while adjusting for years of education, household income, the number of children in their household, and whether being a woman. 
+
+educ:
+a person who has one more year of education is predicted to have 1.05 times the odds of being in the next higher score of happiness category compared to a person who has less years of education, while adjusting for work force status, household income, the number of children in their household, and whether being a woman.
+
+young_members:
+a person who has one more number of children in their household is predicted to have 1.021 times the odds of being in the next higher score of happiness category compared to a person who has less numbers of children in their household, while adjusting for work force status, household income, years of education, and whether being a woman.
+
+female:
+a person who is a woman is predicted to have 1.007 times the odds of being in the next higher score of happiness category compared to a person who is a man, while adjusting for years of education, household income, and number of children in their household. 
