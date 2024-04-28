@@ -10,6 +10,8 @@ library(tidymodels)
 library(readr)
 library(tidyr)
 library(ggplot2)
+install.packages("wesanderson")
+install.packages("ggplot2")
 happiness <- read_csv("happiness.csv")
 
 ```
@@ -78,7 +80,7 @@ ggplot(
          title = "Distribution of participants' general happiness with 
      different work force status, adjusted for gender") +
      facet_wrap(vars(workstat)) +
-  scale_fill_discrete(name = "Gender", labels = c("Male", "Female"))
+  scale_fill_discrete(name = "Gender", labels = c("Male", "Female")) 
 
 
 ggplot(
