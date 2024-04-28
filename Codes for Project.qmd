@@ -1,5 +1,5 @@
 ---
-title: "Project"
+title: "The Way to Happiness: Higher Socioeconomic Status?"
 author: "Tina Qian, Yanlin Li"
 format: pdf
 ---
@@ -124,13 +124,6 @@ ggplot(
 
   Among our predictors, we examined two possible interactions: the interaction between work force status and gender, and that between household income and the count of household members under 17. Given the societal expectation for women to bear children and the stereotype of women primarily responsible for childcare, we anticipate a stronger correlation between being female and working part-time. Additionally, we anticipate that households with higher incomes will generally be able to support more members under 17, necessitating greater economic assistance from other family members.
 
- F test: 
- (all coef associated with the interaction term are equal to 0)
- 
-Hypothesis test:
-H0: there is no interaction between working status and whether one is woman. 
-Ha: there is an interaction between working status and whether one is woman. 
-
 ```{r, echo = F, results = F}
 
 m0 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
@@ -144,7 +137,14 @@ m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) 
 anova(m0, m1)
 
 ```
- Through an anova-f fest, we compared the original model with an interaction model (interaction between work force status and gender) to assess whether the interaction term on average is superior to others versus the null hypothesis that there is no interaction between workstat and woman. This test is performed to detect the difference caused by the interaction term between the original additive model and the interaction model. A significant F-test for the interaction term(s) indicates that the model including interaction effects provides a better fit to the data than the model without interaction effects. The p value for interaction term between full-time working status and female is 0.0003, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time depends on whether the respondent is female. 
+ Through an anova-f fest, we compared the original model with an interaction model (interaction between work force status and gender) to assess whether the interaction term on average is superior to others versus the null hypothesis that there is no interaction between workstat and woman. This test is performed to detect the difference caused by the interaction term between the original additive model and the interaction model. A significant F-test for the interaction term(s) indicates that the model including interaction effects provides a better fit to the data than the model without interaction effects.
+ 
+F test: 
+(all coef associated with the interaction term are equal to 0).   
+H0: there is no interaction between working status and whether one is woman.   
+Ha: there is an interaction between working status and whether one is woman.   
+
+The p value for interaction term between full-time working status and female is 0.0003, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time depends on whether the respondent is female. 
 
 
 ```{r, echo = F, results = F}
@@ -167,10 +167,16 @@ anova(m1, m2)
 ```{r, echo = F, message = F, results = F}
 
 library(MASS)
-library(knitr)
-m3 <- polr(as.factor(Happy) ~ workstat + educ + young_members + income + female, 
+m3 <- polr(as.factor(Happy) ~ workstat + educ + young_members + income + female + as.factor(workstat) * female + as.factor(income) * young_members, 
            data = Happiness, Hess = T)
 exp(coef(m3))
+
+```
+
+```{r, echo = F}
+
+library(knitr)
+include_graphics("Exponentiated coefficients.png")
 
 ```
 
@@ -194,8 +200,8 @@ According to the ordinal regression model, a person in a household with $25000+ 
 ## Discussion
 
   In summary, the overarching conclusion is that employed females with higher household incomes, advanced educational attainment, and a greater number of children at home tend to report higher levels of happiness. However, two unexpected findings emerged: firstly, that females exhibit greater happiness compared to males, contrary to the assumption that males typically possess higher socioeconomic status and thus should be happier. This discrepancy may be attributed to societal and economic pressures placed on males, who are traditionally viewed as primarily responsible for household financial well-being. Secondly, the positive correlation between the presence of young household members and happiness may be explained by the emotional support and warmth provided by children to adults.
+  
+  
 
-  Some limitations in this research include: the potentially problematic strategy on dropping the N/A data (as some missing data may be due to lower SES status), the sampling bias caused by self-reported happiness, potential missing interactions, and potential missing components related to SES status.
-
-  In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
+  Some limitations in this research include: the potentially problematic strategy on dropping the N/A data (as some missing data may be due to lower SES status), the sampling bias caused by self-reported happiness, and potential missing interactions. In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
 
