@@ -164,7 +164,7 @@ anova(m1, m2)
 
 ## Results
 
-```{r, echo = F, message = F, results = F}
+```{r, echo = F, message = F, results = F, warning = F}
 
 library(MASS)
 m3 <- polr(as.factor(Happy) ~ workstat + educ + young_members + income + female + as.factor(workstat) * female + as.factor(income) * young_members, 
@@ -176,7 +176,7 @@ exp(coef(m3))
 ```{r, echo = F}
 
 library(knitr)
-include_graphics("Exponentiated coefficients.png")
+include_graphics("Exp Coef.png")
 
 ```
 
