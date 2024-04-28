@@ -59,7 +59,6 @@ ggplot(
                   different highest year of school completed") +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 
-
 ggplot(
     data = Happiness,
     aes(x = Happy, width = 500, height = 500, fill = as.factor(Happy)))+
@@ -137,15 +136,14 @@ m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) 
 anova(m0, m1)
 
 ```
- Through an anova-f fest, we compared the original model with an interaction model (interaction between work force status and gender) to assess whether the interaction term on average is superior to others versus the null hypothesis that there is no interaction between workstat and woman. This test is performed to detect the difference caused by the interaction term between the original additive model and the interaction model. A significant F-test for the interaction term(s) indicates that the model including interaction effects provides a better fit to the data than the model without interaction effects.
+Through an anova-f fest, we conducted a comparison between the original model and an interaction model (involving both work force status and gender) to evaluate whether the interaction term, on average, performs better than alternatives, as opposed to the null hypothesis suggesting no interaction between work status and gender. This analysis aims to identify discrepancies resulting from the interaction term between the initial additive model and the interaction model. A significant F-test for the interaction term(s) signifies that the model incorporating interaction effects offers a more suitable representation of the data compared to the model lacking interaction effects.
  
 F test: 
 (all coef associated with the interaction term are equal to 0).   
 H0: there is no interaction between working status and whether one is woman.   
 Ha: there is an interaction between working status and whether one is woman.   
 
-The p value for interaction term between full-time working status and female is 0.0003, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time depends on whether the respondent is female. 
-
+The p-value for the interaction term involving full-time work status and gender is 0.0003, indicating statistical significance as it falls below the conventional threshold of 0.05. This provides ample evidence to reject the null hypothesis. Consequently, we conclude that the association between happiness and full-time employment status varies based on the gender of the respondent.
 
 ```{r, echo = F, results = F}
 #Interaction between years of education and working status
@@ -156,11 +154,12 @@ m2 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) 
 
 anova(m1, m2)
 ```
-  We created a second model comparing another interaction (between household income and young members) on top of the first interaction model to detect any potential interaction effects. Our results showed that both f tests are significant, The f statistic value 0.033 for interaction term between household income (dollars per year) and number of children (young_members) across all levels are lower than the significance level 0.05. We have sufficient evidence to reject the null hypothesis, and thus the relationship between the score of general happiness and household income (dollars per year) depends on the number of children in the household. 
 
-  In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
+We constructed a second model to assess additional interaction effects by incorporating another interaction term, this time between household income and the presence of young members, alongside the existing interaction model. Our findings revealed significant results for both F-tests. Specifically, the F-statistic value of 0.033 for the interaction term involving household income (measured in dollars per year) and the number of children (young_members) across all levels falls below the significance level of 0.05. This provides sufficient evidence to reject the null hypothesis. Consequently, we infer that the association between the general happiness score and household income (measured in dollars per year) is contingent upon the number of children within the household.
 
-  After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
+In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
+
+After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
 
 ## Results
 
