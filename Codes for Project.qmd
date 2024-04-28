@@ -4,7 +4,7 @@ author: "Tina Qian, Yanlin Li"
 format: pdf
 ---
 
-```{r read-data, message = F}
+```{r read-data, echo = F, message = F}
 library(tidyverse)
 library(tidymodels)
 library(readr)
@@ -15,19 +15,19 @@ happiness <- read_csv("happiness.csv")
 ```
 ## Introduction: Motivation and Exploratory Data Analysis
 
-Happiness has long been one of people's most important aspires, and the relationship between socioeconomic status (SES) and happiness has become a focal point of multidisciplinary research on individual well-being and societal cohesion. Socioeconomic status, encompassing elements such as income, education, and occupation stands as a pivotal determinant in shaping the quality of life for individuals. Understanding the complexities of this relationship holds significant implications for policymakers, educators, and social scientists alike. While conventional wisdom suggests that higher SES often translates to greater happiness, we are curious to confirm this assumption with data-backed evidence.
+  Happiness has long been one of people's most important aspires, and the relationship between socioeconomic status (SES) and happiness has become a focal point of multidisciplinary research on individual well-being and societal cohesion. Socioeconomic status, encompassing elements such as income, education, and occupation stands as a pivotal determinant in shaping the quality of life for individuals. Understanding the complexities of this relationship holds significant implications for policymakers, educators, and social scientists alike. While conventional wisdom suggests that higher SES often translates to greater happiness, we are curious to confirm this assumption with data-backed evidence.  
 
-We have come across the dataset labeled "happiness," provided by Wooldridge Data, which enables us to explore the correlation between various aspects of socioeconomic status and an individual's self-assessed happiness. This dataset, comprising 33 variables, contains demographic details of 17,137 individuals. Key variables include "happy" (indicating an individual's overall happiness), "workstat" (employment status), "income" (total family income), "educ" (highest level of education attained), "female" (1 if female), "babies" (household members under 6 years old), "preteens" (household members aged 6 to 12), and "teens" (household members aged 13 to 17).
+  We have come across the dataset labeled "happiness," provided by Wooldridge Data, which enables us to explore the correlation between various aspects of socioeconomic status and an individual's self-assessed happiness. ^[https://vincentarelbundock.github.io/Rdatasets/doc/wooldridge/happiness.html] This dataset, comprising 33 variables, contains demographic details of 17,137 individuals. Key variables include "happy" (indicating an individual's overall happiness), "workstat" (employment status), "income" (total family income), "educ" (highest level of education attained), "female" (1 if female), "babies" (household members under 6 years old), "preteens" (household members aged 6 to 12), and "teens" (household members aged 13 to 17).  
 
-Our research question in this instance is whether individuals with higher socioeconomic standing tend to report greater levels of happiness. Our hypothesis is a positive correlation; more specifically, an employed male with high household income, high educational level and fewer young members at home is anticipated to be happier.
+  Our research question in this instance is whether individuals with higher socioeconomic standing tend to report greater levels of happiness. Our hypothesis is a positive correlation; more specifically, an employed male with high household income, high educational level and fewer young members at home is anticipated to be happier.  
 
-Concerning our response variable "happy," we assigned numerical rankings of "1," "2," and "3" to its three categories—"not too happy," "pretty happy," and "very happy," respectively—to facilitate analysis and model fitting.
+  Concerning our response variable "happy," we assigned numerical rankings of "1," "2," and "3" to its three categories—"not too happy," "pretty happy," and "very happy," respectively—to facilitate analysis and model fitting.  
 
-To create the predictor variable that records the number of household members under 17,  which was not originally included in our dataset, we aggregated data from three existing variables: the number of babies, preteens, and teenagers in the household. We believe it's more logical to consider these age groups collectively since each requires financial support and additional care from older members of the household, given that they are not yet fully independent.
+  To create the predictor variable that records the number of household members under 17,  which was not originally included in our dataset, we aggregated data from three existing variables: the number of babies, preteens, and teenagers in the household. We believe it's more logical to consider these age groups collectively since each requires financial support and additional care from older members of the household, given that they are not yet fully independent.  
 
-Given the N/As in the “income” variable and the “young_members” variable, we used dropped those data with N/As for regression.
+  Given the N/As across “educ”, “workstat”, “income” and the “young_members” variable in total is approximately ⅙ of all observations, using imputation to generate missing data might not be the optimal choice in this context. We thus filtered the NAs across each column and generated data visualization and regression on the existing data.   
 
-We generated visualizations to explore the relationships between the predictor variables and the response variable. Since most of our variables, including the response variable, are categorical, we opted for bar plots for all our exploratory data analyses.
+  We generated visualizations to explore the relationships between the predictor variables and the response variable. Since most of our variables, including the response variable, are categorical, we opted for bar plots for all our exploratory data analyses.
 
 ```{r, echo = F}
 
@@ -38,8 +38,10 @@ happiness1 <- happiness |>
   happy == "not too happy" ~ 1,
   happy == "pretty happy" ~ 2,
   happy == "very happy" ~ 3,
-  TRUE ~ NA_integer_
-))
+  TRUE ~ NA_integer_))
+
+happiness1 <- happiness1 |>
+  mutate(income = factor(income, levels=c('lt $1000', '$1000 to 2999', '$3000 to 3999', '$4000 to 4999', '$5000 to 5999', '$6000 to 6999', '$7000 to 7999', '$8000 to 9999', '$10000 - 14999', '$15000 - 19999', '$20000 - 24999', '$25000 or more')))
 
 delete.na <- function(happiness1, n = 0) {
   happiness1[rowSums(is.na(happiness1)) <= n, ]
@@ -48,73 +50,79 @@ delete.na <- function(happiness1, n = 0) {
 Happiness <- delete.na(happiness1, n = 0)
 
 ggplot(
-    data = Happiness,
-    aes(x = educ, fill = as.factor(Happy))
-)+
-geom_bar() +
-labs(x = "Highest Year of School Completed",
+  data = Happiness,
+    aes(x = educ, width = 300, height = 300, fill = as.factor(Happy)))+
+  geom_bar() +
+  labs(x = "Highest Year of School Completed",
          y = "Number of Observations",
          title = "Distribution of participants' general happiness with
-                  different highest year of school completed")
+                  different highest year of school completed") +
+  scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
+
 
 ggplot(
     data = Happiness,
-    aes(x = Happy, fill = as.factor(Happy))
-)+
-geom_bar() +
-labs(y = "Number of Observations",
+    aes(x = Happy, width = 500, height = 500, fill = as.factor(Happy)))+
+  geom_bar() +
+  labs(y = "Number of Observations",
          x = "General Happiness",
          title = "Distribution of participants' general happiness for both genders") +
-     facet_wrap(vars(female),labeller = labeller(female = c("1" = "Females", "0" = "Males")))
+     facet_wrap(vars(female),labeller = labeller(female = c("1" = "Females", "0" = "Males"))) +
+  scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 
 ggplot(
-    data = Happiness,
-    aes(x = Happy, fill = as.factor(female))
-)+
-geom_bar() +
-labs(y = "Number of Observations",
+  data = Happiness,
+    aes(x = Happy, fill = as.factor(female)))+
+  geom_bar() +
+  labs(y = "Number of Observations",
          x = "General Happiness",
          title = "Distribution of participants' general happiness with 
      different work force status, adjusted for gender") +
-     facet_wrap(vars(workstat))
+     facet_wrap(vars(workstat)) +
+  scale_fill_discrete(name = "Gender", labels = c("Male", "Female"))
+
 
 ggplot(
-    data = Happiness,
-    aes(x = Happy, fill = as.factor(Happy))
-)+
-geom_bar() +
-labs(y = "Number of Observations",
+  data = Happiness,
+  aes(x = Happy, fill = as.factor(Happy)))+
+  geom_bar() +
+  labs(y = "Number of Observations",
          x = "General Happiness",
          title = "Distribution of participants' general happiness 
      with different total family income") +
-     facet_wrap(vars(income))
+     facet_wrap(vars(income)) +
+  scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 
 ggplot(
     data = Happiness,
-    aes(x = Happy, fill = as.factor(Happy))
-)+
-geom_bar() +
-labs(y = "Number of Observations",
+    aes(x = Happy, fill = as.factor(Happy)))+
+  geom_bar() +
+  labs(y = "Number of Observations",
          x = "General Happiness",
          title = "Distribution of participants' general happiness 
      with different number of household members under 17") +
-     facet_wrap(vars(young_members))
+     facet_wrap(vars(young_members)) +
+  scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 
 
 ```
 
-The first bar plot examines the distribution of observations across different levels of highest year of school completed in the sample, accounting for their overall happiness. The majority of participants in the sample have completed 12-16 years of education, roughly equivalent to middle school and a high school diploma. Across almost every education level, more individuals selected "pretty happy" than "very happy" or "not too happy," possibly influenced by a tendency to prioritize these responses in general.   
-The second plot analyzes the distribution of observations for males and females separately, considering their overall happiness. Overall, participants tend to choose "pretty happy" more frequently than "very happy" or "not too happy," and there are more female participants in the dataset than male.   
-The third plot examines the distribution of observations across different work force statuses, factoring in gender and overall happiness. Most participants in the dataset are employed full-time, with only a small proportion in school, temporarily unemployed, or not working. More female participants are homemakers or work part-time compared to male participants, while gender distribution is relatively even across other work force statuses. The overall pattern of happiness preference remains consistent across genders.   
-The fourth plot illustrates the distribution of observations across different household income levels, considering overall happiness. The majority of participants have a household income above $10,000, especially those with incomes exceeding $25,000, who strongly favor "pretty happy" and "very happy" over "not too happy." The general pattern of happiness preference persists across all income levels.    
-The fifth plot displays the distribution of observations for participants with different numbers of young household members, adjusting for overall happiness. Most participants do not have anyone under 17 in their household, while those who do typically have one or two such members. The overall pattern of happiness preference remains consistent across these groups.
+  The first bar plot examines the distribution of observations across different levels of highest year of school completed in the sample, accounting for their overall happiness. The majority of participants in the sample have completed 12-16 years of education, roughly equivalent to middle school and a high school diploma. Across almost every education level, more individuals selected "pretty happy" than "very happy" or "not too happy," possibly influenced by a tendency to prioritize these responses in general.  
+  
+  The second plot analyzes the distribution of observations for males and females separately, considering their overall happiness. Overall, participants tend to choose "pretty happy" more frequently than "very happy" or "not too happy," and there are more female participants in the dataset than male.   
 
-Finally, we decided on predicting whether people with higher socioeconomic status are happier with these predictors: work force status (“workstat”), total family income (“income”), highest year of school completed (“educ”), gender (“female”), and the number of household members under 17 (“young_members”).
+  The third plot examines the distribution of observations across different work force statuses, factoring in gender and overall happiness. Most participants in the dataset are employed full-time, with only a small proportion in school, temporarily unemployed, or not working. More female participants are homemakers or work part-time compared to male participants, while gender distribution is relatively even across other work force statuses. The overall pattern of happiness preference remains consistent across genders.   
+  
+  The fourth plot illustrates the distribution of observations across different household income levels, considering overall happiness. The majority of participants have a household income above $10,000, especially those with incomes exceeding $25,000, who strongly favor "pretty happy" and "very happy" over "not too happy." The general pattern of happiness preference persists across all income levels.    
+
+  The fifth plot displays the distribution of observations for participants with different numbers of young household members, adjusting for overall happiness. Most participants do not have anyone under 17 in their household, while those who do typically have one or two such members. The overall pattern of happiness preference remains consistent across these groups.
+
+  Finally, we decided on predicting whether people with higher socioeconomic status are happier with these predictors: work force status (“workstat”), total family income (“income”), highest year of school completed (“educ”), gender (“female”), and the number of household members under 17 (“young_members”).
 
 
 ## Methodology: Interaction Assessment and Model Selection
 
-Among our predictors, we examined two possible interactions: the interaction between work force status and gender, and that between household income and the count of household members under 17. Given the societal expectation for women to bear children and the stereotype of women primarily responsible for childcare, we anticipate a stronger correlation between being female and working part-time. Additionally, we anticipate that households with higher incomes will generally be able to support more members under 17, necessitating greater economic assistance from other family members.
+  Among our predictors, we examined two possible interactions: the interaction between work force status and gender, and that between household income and the count of household members under 17. Given the societal expectation for women to bear children and the stereotype of women primarily responsible for childcare, we anticipate a stronger correlation between being female and working part-time. Additionally, we anticipate that households with higher incomes will generally be able to support more members under 17, necessitating greater economic assistance from other family members.
 
  F test: 
  (all coef associated with the interaction term are equal to 0)
@@ -123,13 +131,11 @@ Hypothesis test:
 H0: there is no interaction between working status and whether one is woman. 
 Ha: there is an interaction between working status and whether one is woman. 
 
-```{r, echo = F}
-
+```{r, echo = F, results = F}
 
 m0 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
            female,
          data = Happiness)
-summary(m0)
 
 m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
            female + as.factor(workstat)*female,
@@ -138,9 +144,9 @@ m1 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) 
 anova(m0, m1)
 
 ```
-The p value for interaction term between full-time working status and female is 0.0001, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is depended on whether the respondent is female. 
+  The p value for interaction term between full-time working status and female is 3.059e-05, which is lower than a significance level of 0.05 and statistically significant. We have sufficient evidence to reject the null hypothesis, and thus the relationship between happiness and whether one is working full-time is depended on whether the respondent is female. 
 
-```{r, echo = F}
+```{r, echo = F, results = F}
 #Interaction between years of education and working status
 
 m2 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) + 
@@ -149,23 +155,25 @@ m2 <- lm(Happy ~ as.factor(workstat) + educ + young_members + as.factor(income) 
 
 anova(m1, m2)
 ```
-The f statistic value 0.033 for interaction term between household income (dollars per year) and number of children (young_members) across all levels are lower than the significance level 0.05. We have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income (dollars per year) is depended on the number of children in the household. 
+  The f statistic value 0.03307 for interaction term between household income (dollars per year) and number of children (young_members) across all levels are lower than the significance level 0.05. We have sufficient evidence to reject the null hypothesis, and thus the relationship between score of general happiness and household income (dollars per year) is depended on the number of children in the household. 
 
-In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
+  In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
 
-After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
+  After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
 
 ## Results
 
-```{r, echo = F}
+```{r, echo = F, message = F, results = F}
+
 library(MASS)
-m3 <- polr(as.factor(Happy) ~ as.factor(workstat) + educ + young_members + as.factor(income) + female, 
+library(knitr)
+m3 <- polr(as.factor(Happy) ~ workstat + educ + young_members + income + female, 
            data = Happiness, Hess = T)
 exp(coef(m3))
 
 ```
 
-Based on the outcomes derived from the regression model, we have formulated interpretations corresponding to each of the predictor variables.
+  Based on the outcomes derived from the regression model, we have formulated interpretations corresponding to each of the predictor variables.
 
 workstat:  
 According to the ordinal regression model, a person who retired is predicted to have 1.213 times the odds of being in the next higher score of happiness category compared to a person who keeps house, while adjusting for years of education, household income, the number of children they have, and whether being a woman. In the work force status categories, people with all other status are predicted to have lower possibilities of being in the next higher score of happiness category compared to those who keep houses, while adjusting for years of education, household income, the number of children in their household, and whether being a woman. 
@@ -184,9 +192,9 @@ According to the ordinal regression model, a person in a household with $25000+ 
 
 ## Discussion
 
-In summary, the overarching conclusion is that employed females with higher household incomes, advanced educational attainment, and a greater number of children at home tend to report higher levels of happiness. However, two unexpected findings emerged: firstly, that females exhibit greater happiness compared to males, contrary to the assumption that males typically possess higher socioeconomic status and thus should be happier. This discrepancy may be attributed to societal and economic pressures placed on males, who are traditionally viewed as primarily responsible for household financial well-being. Secondly, the positive correlation between the presence of young household members and happiness may be explained by the emotional support and warmth provided by children to adults.
+  In summary, the overarching conclusion is that employed females with higher household incomes, advanced educational attainment, and a greater number of children at home tend to report higher levels of happiness. However, two unexpected findings emerged: firstly, that females exhibit greater happiness compared to males, contrary to the assumption that males typically possess higher socioeconomic status and thus should be happier. This discrepancy may be attributed to societal and economic pressures placed on males, who are traditionally viewed as primarily responsible for household financial well-being. Secondly, the positive correlation between the presence of young household members and happiness may be explained by the emotional support and warmth provided by children to adults.
 
-Some limitations in this research include: the potentially problematic strategy on dropping the N/A data (as some missing data may be due to lower SES status), the sampling bias caused by self-reported happiness, potential missing interactions, and potential missing components related to SES status.
+  Some limitations in this research include: the potentially problematic strategy on dropping the N/A data (as some missing data may be due to lower SES status), the sampling bias caused by self-reported happiness, potential missing interactions, and potential missing components related to SES status.
 
-In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
+  In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
 
