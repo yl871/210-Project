@@ -151,10 +151,13 @@ anova(m0, m1)
 ```
 Through an anova-f fest, we conducted a comparison between the original model and an interaction model (involving both work force status and gender) to evaluate whether the interaction term, on average, performs better than alternatives, as opposed to the null hypothesis suggesting no interaction between work status and gender. This analysis aims to identify discrepancies resulting from the interaction term between the initial additive model and the interaction model. A significant F-test for the interaction term(s) signifies that the model incorporating interaction effects offers a more suitable representation of the data compared to the model lacking interaction effects.
  
-F test: 
-(all coef associated with the interaction term are equal to 0).   
+F test for m1: 
 H0: there is no interaction between working status and whether one is woman.   
 Ha: there is an interaction between working status and whether one is woman.   
+
+F test for m2:
+H0: there is no interaction between household income and the number of young members in the household. 
+Ha: there is an interaction between household income and the number of young members in the household. 
 
 The p-value for the interaction term involving full-time work status and gender is 0.0003, indicating statistical significance as it falls below the conventional threshold of 0.05. This provides ample evidence to reject the null hypothesis. Consequently, we conclude that the association between happiness and full-time employment status varies based on the gender of the respondent.
 
