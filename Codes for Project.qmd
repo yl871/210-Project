@@ -31,7 +31,7 @@ happiness <- read_csv("happiness.csv")
 
   We generated visualizations to explore the relationships between the predictor variables and the response variable. Since most of our variables, including the response variable, are categorical, we opted for bar plots for all our exploratory data analyses.
 
-```{r, echo = F}
+```{r, echo = F, fig.show='hide', results = F}
 
 happiness1 <- happiness |>
   mutate(young_members = babies + preteen + teens) |>
@@ -107,6 +107,15 @@ ggplot(
      facet_wrap(vars(young_members)) +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 
+
+```
+
+```{r, echo = F}
+
+library(knitr)
+include_graphics("Plots-1.png")
+include_graphics("Plots-2.png")
+include_graphics("Plots-3.png")
 
 ```
 
@@ -206,12 +215,14 @@ While an additional child in the household generally corresponds to increased ha
 Considering the interaction between the number of young dependents and household income, while accounting for education, gender, and employment status, individuals with household incomes above $1000 are anticipated to experience reduced probabilities of being in the next higher happiness category for each additional young dependent, compared to those with a $1000 income (ex. (1.226)·(0.786)=0.964 times higher odds for $1000-$2999). However, individuals with household incomes exceeding $8000 demonstrate elevated odds of attaining the next higher happiness category compared to those with incomes ranging from $1000 to $8000 (ex. (1.226)·(0.887)=1.087 times higher odds for $8000-$8999). This phenomenon suggests a potential income threshold, wherein higher income levels, coupled with increased socioeconomic responsibilities, correlate with heightened probabilities of achieving greater happiness scores.
 
 
-## Discussion
+## Discussion: Summary, Strengths, and Limitations
 
 In summary, the overarching finding indicates that employed females with higher household incomes, advanced education levels, and a larger number of children at home tend to report elevated levels of happiness.
 
 However, two unexpected discoveries have emerged. Firstly, contrary to the assumption that males, typically with higher socioeconomic status, should be happier, females actually exhibit greater happiness levels. This deviation may stem from societal and economic pressures placed on males, who are traditionally seen as the primary providers for household financial stability. Furthermore, the results section reveals variations in happiness levels among women based on their employment status. Retired and full-time working women do not consistently exhibit higher happiness scores, suggesting that women who work face challenges in both professional and domestic realms, encountering workplace discrimination and microaggressions while juggling additional household responsibilities. These factors likely contribute to lower happiness scores compared to women primarily engaged in homemaking.
 
 Secondly, there is a positive correlation between the presence of young household members, but this correlation diminishes when considering its interaction with total family income levels. This suggests that higher income levels, coupled with increased socioeconomic responsibilities, correlate with higher probabilities of achieving greater happiness scores. Given that households with more children typically have higher total incomes, the observed positive correlation between happiness and increased young dependents may primarily result from the influence of higher income rather than solely from the presence of additional children.
+
+The key strength of our analysis lies in our incorporation of socioeconomic variables into our interpretations through the creation of two interaction terms: the female-workstat interaction underscores how additional responsibilities associated with women's societal roles in various contexts impact their happiness perception, while the young members-income interaction highlights how economic status and household conditions collectively shape one's happiness perception, reflecting broader social structures and class divisions beyond the household. Our data analysis offers valuable insights into the complexities of identities and the nuanced dynamics within both social and domestic relationships, particularly in the context of examining the relationship between an individual's socioeconomic status and their level of happiness.
 
 Some limitations in this research include the sampling bias caused by self-reported happiness and potential missing interactions. In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
