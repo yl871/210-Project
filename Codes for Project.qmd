@@ -57,7 +57,7 @@ ggplot(
   geom_bar() +
   labs(x = "Highest Year of School Completed",
          y = "Number of Observations",
-         title = "Distribution of participants' general happiness with
+         title = "Plot 1: Distribution of participants' general happiness with
                   different highest year of school completed") +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
   out.width = "50%"
@@ -68,7 +68,7 @@ ggplot(
   geom_bar() +
   labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness for both genders") +
+         title = "Plot 2: Distribution of participants' general happiness for both genders") +
      facet_wrap(vars(female),labeller = labeller(female = c("1" = "Females", "0" = "Males"))) +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
 out.width = "50%"
@@ -79,7 +79,7 @@ ggplot(
   geom_bar() +
   labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness with 
+         title = "Plot 3: Distribution of participants' general happiness with 
      different work force status, adjusted for gender") +
      facet_wrap(vars(workstat)) +
   scale_fill_discrete(name = "Gender", labels = c("Male", "Female")) 
@@ -91,7 +91,7 @@ ggplot(
   geom_bar() +
   labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness 
+         title = "Plot 4: Distribution of participants' general happiness 
      with different total family income") +
      facet_wrap(vars(income)) +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
@@ -102,7 +102,7 @@ ggplot(
   geom_bar() +
   labs(y = "Number of Observations",
          x = "General Happiness",
-         title = "Distribution of participants' general happiness 
+         title = "Plot 5: Distribution of participants' general happiness 
      with different number of household members under 17") +
      facet_wrap(vars(young_members)) +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
@@ -193,9 +193,7 @@ After adjusting for factors such as years of education, household income, number
 
 A woman is predicted to have 1.418 times the odds of being in the next higher score of happiness category compared to a man, while adjusting for all other variables. However, when accounting for the interaction between gender and employment status, it is found that the happiness levels of women, although diverging from the overall pattern, are still influenced by their work status.  
 
-When adjusting for education, income, and number of children, and compared to homemaking women, unemployed women have 1.098 times the odds of being in a higher happiness category, while part-time working women have 1.076 times higher odds. Conversely, women in other employment statuses, including full-time work, temporary unemployment, being in school, or retirement, are predicted to have lower odds of achieving the next higher happiness level.
-
-The interaction analysis reveals that retired and full-time working women do not necessarily experience higher happiness scores. This suggests that women who work often encounter challenges in both professional and domestic spheres, facing discrimination and microaggressions in the workplace while bearing additional domestic responsibilities at home. These factors may contribute to lower happiness scores compared to women who primarily focus on homemaking.
+When adjusting for education, income, and number of children, and compared to homemaking women, unemployed women have (1.418)·(1.098)=1.557 times the odds of being in a higher happiness category, while part-time working women have (1.418)·(1.076)=1.513 times higher odds. Conversely, women in other employment statuses, including full-time work, temporary unemployment, being in school, or retirement, are predicted to have lower odds of achieving the next higher happiness level.
 
 Household Condition:
 
@@ -205,14 +203,15 @@ However, individuals with household incomes ranging from $1000 to $2999 and $400
 
 While an additional child in the household generally corresponds to increased happiness, happiness scores tend to decline as the number of dependents rises across all income categories. The notable correlation between higher household income and larger family size offers a potential explanation.
 
-Considering the interaction between the number of young dependents and household income, while accounting for education, gender, and employment status, individuals with household incomes above $1000 are anticipated to experience reduced probabilities of being in the next higher happiness category for each additional young dependent, compared to those with a $1000 income. This phenomenon suggests that as the number of young dependents increases alongside growing socioeconomic responsibilities, individuals with higher incomes also exhibit greater likelihood of achieving higher happiness scores.
-
-Given that households with more children tend to have higher total incomes, the observed general positive correlation between happiness and increased young dependents in the household may be attributed to the influence of higher income rather than solely to the presence of additional children.
+Considering the interaction between the number of young dependents and household income, while accounting for education, gender, and employment status, individuals with household incomes above $1000 are anticipated to experience reduced probabilities of being in the next higher happiness category for each additional young dependent, compared to those with a $1000 income (ex. (1.226)·(0.786)=0.964 times higher odds for $1000-$2999). However, individuals with household incomes exceeding $8000 demonstrate elevated odds of attaining the next higher happiness category compared to those with incomes ranging from $1000 to $8000 (ex. (1.226)·(0.887)=1.087 times higher odds for $8000-$8999). This phenomenon suggests a potential income threshold, wherein higher income levels, coupled with increased socioeconomic responsibilities, correlate with heightened probabilities of achieving greater happiness scores.
 
 
 ## Discussion
 
-  In summary, the overarching conclusion is that employed females with higher household incomes, advanced educational attainment, and a greater number of children at home tend to report higher levels of happiness. However, two unexpected findings emerged: firstly, that females exhibit greater happiness compared to males, contrary to the assumption that males typically possess higher socioeconomic status and thus should be happier. This discrepancy may be attributed to societal and economic pressures placed on males, who are traditionally viewed as primarily responsible for household financial well-being. Secondly, the positive correlation between the presence of young household members and happiness may be explained by the emotional support and warmth provided by children to adults.
+In summary, the overarching finding indicates that employed females with higher household incomes, advanced education levels, and a larger number of children at home tend to report elevated levels of happiness.
 
-  Some limitations in this research include: the potentially problematic strategy on dropping the N/A data (as some missing data may be due to lower SES status), the sampling bias caused by self-reported happiness, and potential missing interactions. In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
+However, two unexpected discoveries have emerged. Firstly, contrary to the assumption that males, typically with higher socioeconomic status, should be happier, females actually exhibit greater happiness levels. This deviation may stem from societal and economic pressures placed on males, who are traditionally seen as the primary providers for household financial stability. Furthermore, the results section reveals variations in happiness levels among women based on their employment status. Retired and full-time working women do not consistently exhibit higher happiness scores, suggesting that women who work face challenges in both professional and domestic realms, encountering workplace discrimination and microaggressions while juggling additional household responsibilities. These factors likely contribute to lower happiness scores compared to women primarily engaged in homemaking.
 
+Secondly, there is a positive correlation between the presence of young household members, but this correlation diminishes when considering its interaction with total family income levels. This suggests that higher income levels, coupled with increased socioeconomic responsibilities, correlate with higher probabilities of achieving greater happiness scores. Given that households with more children typically have higher total incomes, the observed positive correlation between happiness and increased young dependents may primarily result from the influence of higher income rather than solely from the presence of additional children.
+
+Some limitations in this research include the sampling bias caused by self-reported happiness and potential missing interactions. In addition to addressing the limitations in our research, future studies in this field can concentrate on investigating the underlying reasons behind the two unexpected findings, evaluating the validity of the explanations we have proposed, and exploring additional factors that may influence the relationship between socioeconomic status and happiness.
