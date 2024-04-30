@@ -163,7 +163,7 @@ In our study, we contemplated employing both multinomial regression and ordinal 
 
 After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
 
-## Results
+## Results: Effects of Education, Gender-Adjusted Work Status, and Household Condition
 
 ```{r, echo = F, message = F, results = F, warning = F}
 
@@ -181,22 +181,32 @@ include_graphics("Exp Coef.png")
 
 ```
 
-  Based on the outcomes derived from the regression model, we have formulated interpretations corresponding to each of the predictor variables.
+Education:
 
-workstat:  
-According to the ordinal regression model, a person who retired is predicted to have 1.213 times the odds of being in the next higher score of happiness category compared to a person who keeps house, while adjusting for years of education, household income, the number of children they have, and whether being a woman. In the work force status categories, people with all other status are predicted to have lower possibilities of being in the next higher score of happiness category compared to those who keep houses, while adjusting for years of education, household income, the number of children in their household, and whether being a woman. 
+A person who has one more year of education is predicted to have 1.04 times the odds of being in the next higher score of happiness category compared to a person who has less years of education, while adjusting for other variables. Generally, having an additional year of education indicates a higher level of happiness. 
 
-educ:  
-A person who has one more year of education is predicted to have 1.05 times the odds of being in the next higher score of happiness category compared to a person who has less years of education, while adjusting for work force status, household income, the number of children in their household, and whether being a woman.
+Gender-Adjusted Work Status:
 
-young_members:  
-A person who has one more number of children in their household is predicted to have 1.021 times the odds of being in the next higher score of happiness category compared to a person who has less numbers of children in their household, while adjusting for work force status, household income, years of education, and whether being a woman.
+After adjusting for factors such as years of education, household income, number of children, and gender, individuals who are retired are expected to have 1.702 times higher odds of achieving a higher level of happiness compared to those who are homemakers. Similarly, full-time workers are anticipated to have 1.120 times higher odds of being in a higher happiness category compared to homemakers. Conversely, individuals in other employment statuses are predicted to have lower odds of reaching a higher happiness category than homemakers.
 
-female:  
-A person who is a woman is predicted to have 1.007 times the odds of being in the next higher score of happiness category compared to a person who is a man, while adjusting for years of education, household income, and number of children in their household. 
+A woman is predicted to have 1.418 times the odds of being in the next higher score of happiness category compared to a man, while adjusting for all other variables. However, when accounting for the interaction between gender and employment status, it is found that the happiness levels of women, although diverging from the overall pattern, are still influenced by their work status.  
 
-income:  
-According to the ordinal regression model, a person in a household with $25000+ total income is predicted to have 2.709 times the odds of being in the next higher score of happiness category compared to a person in a household with $1000-2999 total income, while adjusting for years of education, work force status, the number of children they have, and whether being a woman. In the total family income categories, people with all other status are predicted to have lower possibilities of being in the next higher score of happiness category compared to those with $1000-2999 total income, which is the lowest of all, while adjusting for other variables.
+When adjusting for education, income, and number of children, and compared to homemaking women, unemployed women have 1.098 times the odds of being in a higher happiness category, while part-time working women have 1.076 times higher odds. Conversely, women in other employment statuses, including full-time work, temporary unemployment, being in school, or retirement, are predicted to have lower odds of achieving the next higher happiness level.
+
+The interaction analysis reveals that retired and full-time working women do not necessarily experience higher happiness scores. This suggests that women who work often encounter challenges in both professional and domestic spheres, facing discrimination and microaggressions in the workplace while bearing additional domestic responsibilities at home. These factors may contribute to lower happiness scores compared to women who primarily focus on homemaking.
+
+Household Condition:
+
+When considering various factors influencing an individual's happiness score, household income emerges as the primary determinant. Compared to individuals in households with a $1000 total income, those with incomes exceeding $10000 exhibit more than a 1-fold increase in the odds of reaching the next higher happiness category, after adjusting for other variables. Specifically, individuals in households with $25000 or more in total income are predicted to have 2.598 times the odds of attaining the next higher happiness category.
+
+However, individuals with household incomes ranging from $1000 to $2999 and $4000 to $5999 also demonstrate odds greater than 1 for reaching the next higher happiness category. This phenomenon may be attributed to class distinctions, which significantly influence perceptions of happiness within one's own socioeconomic stratum. Individuals on the cusp of upward mobility often face heightened challenges despite having higher household incomes relative to their peers.
+
+While an additional child in the household generally corresponds to increased happiness, happiness scores tend to decline as the number of dependents rises across all income categories. The notable correlation between higher household income and larger family size offers a potential explanation.
+
+Considering the interaction between the number of young dependents and household income, while accounting for education, gender, and employment status, individuals with household incomes above $1000 are anticipated to experience reduced probabilities of being in the next higher happiness category for each additional young dependent, compared to those with a $1000 income. This phenomenon suggests that as the number of young dependents increases alongside growing socioeconomic responsibilities, individuals with higher incomes also exhibit greater likelihood of achieving higher happiness scores.
+
+Given that households with more children tend to have higher total incomes, the observed general positive correlation between happiness and increased young dependents in the household may be attributed to the influence of higher income rather than solely to the presence of additional children.
+
 
 ## Discussion
 
