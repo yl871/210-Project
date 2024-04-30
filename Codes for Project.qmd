@@ -19,13 +19,13 @@ happiness <- read_csv("happiness.csv")
 
   Happiness has long been one of people's most important aspires, and the relationship between socioeconomic status (SES) and happiness has become a focal point of multidisciplinary research on individual well-being and societal cohesion. Socioeconomic status, encompassing elements such as income, education, and occupation stands as a pivotal determinant in shaping the quality of life for individuals. Understanding the complexities of this relationship holds significant implications for policymakers, educators, and social scientists alike. While conventional wisdom suggests that higher SES often translates to greater happiness, we are curious to confirm this assumption with data-backed evidence -- research also suggests that education and employment are critical social determinants of subjective health and happiness, and these effects vary between women and men. ^[Maharlouei, Najmeh et al. “Subjective Health and Happiness in the United States: Gender Differences in the Effects of Socioeconomic Status Indicators.” Journal of mental health & clinical psychology vol. 4,2 (2020): 8-17. doi:10.29245/2578-2959/2020/2.1196]
 
-  We have come across the dataset labeled "happiness," provided by Wooldridge Data, which enables us to explore the correlation between various aspects of socioeconomic status and an individual's self-assessed happiness. ^[https://vincentarelbundock.github.io/Rdatasets/doc/wooldridge/happiness.html] This dataset, comprising 33 variables, contains demographic details of 17,137 individuals. Key variables include "happy" (indicating an individual's overall happiness), "workstat" (employment status), "income" (total family income), "educ" (highest level of education attained), "female" (1 if female), "babies" (household members under 6 years old), "preteens" (household members aged 6 to 12), and "teens" (household members aged 13 to 17).  
+  We have come across the dataset labeled "happiness," provided by Wooldridge Data and collected through online surveys, which enables us to explore the correlation between various aspects of socioeconomic status and an individual's self-assessed happiness. ^[https://vincentarelbundock.github.io/Rdatasets/doc/wooldridge/happiness.html] This dataset, comprising 33 variables, contains demographic details of 17,137 individuals. Key variables include "happy" (indicating an individual's overall happiness), "workstat" (employment status), "income" (total family income), "educ" (highest level of education attained), "female" (1 if female), "babies" (household members under 6 years old), "preteens" (household members aged 6 to 12), and "teens" (household members aged 13 to 17).  
 
   Our research question in this instance is whether individuals with higher socioeconomic standing tend to report greater levels of happiness. Our hypothesis is a positive correlation; more specifically, an employed male with high household income, high educational level and fewer young members at home is anticipated to be happier.  
 
   Concerning our response variable "happy," we assigned numerical rankings of "1," "2," and "3" to its three categories—"not too happy," "pretty happy," and "very happy," respectively—to facilitate analysis and model fitting.  
 
-  To create the predictor variable that records the number of household members under 17,  which was not originally included in our dataset, we aggregated data from three existing variables: the number of babies, preteens, and teenagers in the household. We believe it's more logical to consider these age groups collectively since each requires financial support and additional care from older members of the household, given that they are not yet fully independent.  
+  To create the predictor variable that records the number of household members under 17, which was not originally included in our dataset, we aggregated data from three existing variables: the number of babies, preteens, and teenagers in the household. We believe it's more logical to consider these age groups collectively since each requires financial support and additional care from older members of the household, given that they are not yet fully independent.  
 
   Given the N/As across “educ”, “workstat”, “income” and the “young_members” variable in total is approximately ⅙ of all observations, using imputation to generate missing data might not be the optimal choice in this context. We thus filtered the NAs across each column and generated data visualization and regression on the existing data.   
 
@@ -173,7 +173,7 @@ anova(m1, m2)
 
 We constructed a second model to assess additional interaction effects by incorporating another interaction term, this time between household income and the presence of young members, alongside the existing interaction model. Our findings revealed significant results for both F-tests. Specifically, the F-statistic value of 0.033 for the interaction term involving household income (measured in dollars per year) and the number of children (young_members) across all levels falls below the significance level of 0.05. This provides sufficient evidence to reject the null hypothesis. Consequently, we infer that the association between the general happiness score and household income (measured in dollars per year) is contingent upon the number of children within the household.
 
-In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy."
+In our study, we contemplated employing both multinomial regression and ordinal regression models for the categorical response variable. Ultimately, we opted for the latter. The decision was straightforward, as the response variable "happy" exhibits an ordinal nature, with discernible gradations from "not too happy" to "pretty happy" to "very happy." We see that the proportional odds assumption is fulfilled as we perceive the change in predictors to have the same conditional relationship with odds of being across different categories.
 
 After assessing and confirming all the above conditions, we went into fitting the ordinal regression model.
 
@@ -194,6 +194,7 @@ library(knitr)
 include_graphics("Exp Coef.png")
 
 ```
+
 
 Education:
 
