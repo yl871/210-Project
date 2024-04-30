@@ -10,8 +10,6 @@ library(tidymodels)
 library(readr)
 library(tidyr)
 library(ggplot2)
-install.packages("wesanderson")
-install.packages("ggplot2")
 happiness <- read_csv("happiness.csv")
 
 ```
