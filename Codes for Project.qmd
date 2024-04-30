@@ -10,6 +10,8 @@ library(tidymodels)
 library(readr)
 library(tidyr)
 library(ggplot2)
+
+
 happiness <- read_csv("happiness.csv")
 
 ```
@@ -58,6 +60,7 @@ ggplot(
          title = "Distribution of participants' general happiness with
                   different highest year of school completed") +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
+  out.width = "50%"
 
 ggplot(
     data = Happiness,
@@ -68,6 +71,7 @@ ggplot(
          title = "Distribution of participants' general happiness for both genders") +
      facet_wrap(vars(female),labeller = labeller(female = c("1" = "Females", "0" = "Males"))) +
   scale_fill_discrete(name = "Rated Happiness", labels = c("Not too happy", "Pretty happy", "Very happy"))
+out.width = "50%"
 
 ggplot(
   data = Happiness,
